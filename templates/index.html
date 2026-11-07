@@ -34,11 +34,9 @@
                     <!-- Название и кнопка смены статуса -->
                     <div class="d-flex align-items-center gap-3">
                         <!-- Кнопка смены статуса -->
-                        <form action="/toggle/{{ task.id }}?filter={{ current_filter }}" method="POST" class="m-0">
-                            <input class="form-check-input fs-5 m-0" type="checkbox" 
-                                   {% if task.done %}checked{% endif %} 
-                                   onchange="this.form.submit()">
-                        </form>
+                        <input class="form-check-input fs-5 m-0 toggle-checkbox" type="checkbox" 
+                            data-id="{{ task.id }}"
+                            {% if task.done %}checked{% endif %}>
                         
                         <!-- Сама задача -->
                         <span class="{% if task.done %}task-done{% endif %} fs-5">
@@ -49,11 +47,11 @@
                     <!-- Кнопки действий -->
                     <div class="task-actions">
                         <!-- Ссылка на редактирование -->
-                        <a href="/edit/{{ task.id }}?filter={{ current_filter }}" class="btn btn-sm btn-outline-secondary">Изменить</a>
+                        <a href="/task/edit/{{ task.id }}?filter={{ current_filter }}" class="btn btn-sm btn-outline-secondary">Изменить</a>
                         
                         <!-- Форма удаления --> 
                         <form action="/delete/{{ task.id }}?filter={{ current_filter }}" method="POST" class="d-inline" onsubmit="return confirm('Удалить задачу?')">
-                            <button type="submit" class="btn btn-sm btn-outline-danger">Удалить</button>
+                            <button data-id="{{ task.id }}" class="btn btn-sm btn-outline-danger delete-btn">Удалить</button>
                         </form>
                     </div>
                 </li>
@@ -66,4 +64,30 @@
 
         </div>
     </div>
+
+<script>
+   document.addEventListener('DOMContentLoaded', () => {
+        
+        // Обработчик для кнопок смены статуса
+        document.querySelectorAll('.toggle-checkbox').forEach(checkbox => {
+            checkbox.addEventListener('change', function() {
+                const taskId = this.getAttribute('data-id');
+                fetch('/task/toggle/' + taskId + window.location.search, { method: 'POST' })
+                    .then(response => { if (response.ok) window.location.reload(); });
+            });
+        });
+
+        // Обработчик для кнопок удаления
+        document.querySelectorAll('.delete-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                if (confirm('Удалить задачу?')) {
+                    const taskId = this.getAttribute('data-id');
+                    fetch('/task/delete/' + taskId + window.location.search, { method: 'POST' })
+                        .then(response => { if (response.ok) window.location.reload(); });
+                }
+            });
+        });
+
+    });
+</script>
 {% endblock %}

@@ -10,7 +10,7 @@
                     <h1 class="h4 mb-0" class="mb-0">Редактирование задачи</h1>
                 </div>
                 <div class="card-body">
-                    <form action="/edit/{{ task.id }}?filter={{ current_filter }}" method="POST">
+                    <form action="/task/edit/{{ task.id }}?filter={{ current_filter }}" method="POST">
                         <div class="mb-3">
                             <label for="taskContent" class="form-label">Текст задачи</label>
                             <input type="text" class="form-control" id="taskContent" name="content" value="{{ task.content }}" required>

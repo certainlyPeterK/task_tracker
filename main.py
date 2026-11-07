@@ -45,7 +45,7 @@ def index():
         return render_template('index.html', tasks=tasks, current_filter=filter_type)
 
 #Изменение статуса
-@app.route('/toggle/<int:id>', methods=['POST'])
+@app.route('/task/toggle/<int:id>', methods=['POST'])
 def toggle(id):
     task = Task.query.get_or_404(id)
     task.done = not task.done
@@ -59,7 +59,7 @@ def toggle(id):
         return f"Ошибка при обновлении: {e}"
 
 #Удаление
-@app.route('/delete/<int:id>', methods=['POST'])
+@app.route('/task/delete/<int:id>', methods=['POST'])
 def delete(id):
     task = Task.query.get_or_404(id)
     try:
@@ -73,7 +73,7 @@ def delete(id):
         return f"Ошибка при удалении: {e}"
 
 #Редактирование
-@app.route('/edit/<int:id>', methods=['GET', 'POST'])
+@app.route('/task/edit/<int:id>', methods=['GET', 'POST'])
 def edit(id):
     task = Task.query.get_or_404(id)
     filter_type = request.args.get('filter', 'all')
