@@ -20,7 +20,7 @@ class Task(db.Model):
 
 #Главная страница
 
-#Добавление задачи
+#Добавление и показывание задачи
 @app.route('/', methods=['POST', 'GET'])
 def index():
     if request.method == 'POST':
@@ -33,8 +33,16 @@ def index():
         except Exception as e:
             return f"Ошибка при добавлении: {e}"
     else:
-        tasks = Task.query.order_by(Task.id.desc()).all()
-        return render_template('index.html', tasks=tasks)
+        filter_type = request.args.get('filter', 'all')
+        
+        if filter_type == 'active':
+            tasks = Task.query.filter_by(done=False).order_by(Task.id.desc()).all()
+        elif filter_type == 'done':
+            tasks = Task.query.filter_by(done=True).order_by(Task.id.desc()).all()
+        else:
+            tasks = Task.query.order_by(Task.id.desc()).all()
+            
+        return render_template('index.html', tasks=tasks, current_filter=filter_type)
 
 #Изменение статуса
 @app.route('/toggle/<int:id>', methods=['POST'])
@@ -43,7 +51,10 @@ def toggle(id):
     task.done = not task.done
     try:
         db.session.commit()
-        return redirect('/')
+        filter_type = request.args.get('filter', 'all')
+        if filter_type == 'all':
+            return redirect(url_for('index'))
+        return redirect(url_for('index', filter=filter_type))
     except Exception as e:
         return f"Ошибка при обновлении: {e}"
 
@@ -54,7 +65,10 @@ def delete(id):
     try:
         db.session.delete(task)
         db.session.commit()
-        return redirect('/')
+        filter_type = request.args.get('filter', 'all')
+        if filter_type == 'all':
+            return redirect(url_for('index'))
+        return redirect(url_for('index', filter=filter_type))
     except Exception as e:
         return f"Ошибка при удалении: {e}"
 
@@ -62,18 +76,19 @@ def delete(id):
 @app.route('/edit/<int:id>', methods=['GET', 'POST'])
 def edit(id):
     task = Task.query.get_or_404(id)
+    filter_type = request.args.get('filter', 'all')
     
     if request.method == 'POST':
-        # Если пришел POST-запрос, значит пользователь нажал "Сохранить"
         task.content = request.form['content']
         try:
             db.session.commit()
-            return redirect('/')
+            if filter_type == 'all':
+                return redirect(url_for('index'))
+            return redirect(url_for('index', filter=filter_type))
         except Exception as e:
             return f"Ошибка при редактировании: {e}"
     else:
-        # Если GET-запрос, просто показываем страницу с формой
-        return render_template('edit.html', task=task)
+        return render_template('edit.html', task=task, current_filter=filter_type)
 
 #Запуск
 if __name__ == "__main__":

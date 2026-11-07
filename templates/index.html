@@ -12,11 +12,18 @@
         <button type="submit">Добавить</button>
     </form>
 
+    <!-- Блок с фильтрами -->
+    <div>
+        <a href="/?filter=all" class="filter {% if current_filter == 'all' %}filter-active{% endif %}">Все</a>
+        <a href="/?filter=active" class="filter {% if current_filter == 'active' %}filter-active{% endif %}">Активные</a>
+        <a href="/?filter=done" class="filter {% if current_filter == 'done' %}filter-active{% endif %}">Выполненные</a>
+    </div>
+
     <!-- Список задач и управляющие элементы -->
     <ul>    
         {% for task in tasks %}
             <li>
-                <form action="/toggle/{{ task.id }}" method="POST">     <!-- Форма изменения статуса -->
+                <form action="/toggle/{{ task.id }}?filter={{ current_filter }}" method="POST">     <!-- Форма изменения статуса -->
                     <input type="checkbox" 
                         {% if task.done %}checked{% endif %} 
                         onchange="this.form.submit()" 
@@ -29,9 +36,9 @@
                 </span>
 
                 <div class="task-actions">
-                    <a href="/edit/{{ task.id }}">Редактировать</a> <!-- Ссылка на редактирование -->
+                    <a href="/edit/{{ task.id }}?filter={{ current_filter }}">Редактировать</a> <!-- Ссылка на редактирование -->
                     
-                    <form action="/delete/{{ task.id }}" method="POST"
+                    <form action="/delete/{{ task.id }}?filter={{ current_filter }}" method="POST"
                     onsubmit="return confirm('Точно удалить задачу?')">   <!-- Форма удаления --> 
                         <button type="submit">Удалить</button>
                     </form>

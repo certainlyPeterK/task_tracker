@@ -9,12 +9,12 @@
     <h1>Редактирование задачи</h1>
     
     <!-- Форма для отправки нового текста задачи -->
-    <form action="/edit/{{ task.id }}" method="POST">
+    <form action="/edit/{{ task.id }}?filter={{ current_filter }}" method="POST">
         <input type="text" name="content" value="{{ task.content }}" required size="50">
         <button type="submit">Сохранить</button>
     </form>
     
     <br>
-    <a href="/">Отмена</a>
+    <a href="/?filter={{ current_filter }}">Отмена</a>
 </body>
 </html>
