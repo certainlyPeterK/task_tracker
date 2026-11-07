@@ -1,20 +1,31 @@
-<!DOCTYPE html>
-<html lang="ru">
-<head>
-    <meta charset="UTF-8">
-    <title>Редактирование</title>
-    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
-</head>
-<body>
-    <h1>Редактирование задачи</h1>
-    
-    <!-- Форма для отправки нового текста задачи -->
-    <form action="/edit/{{ task.id }}?filter={{ current_filter }}" method="POST">
-        <input type="text" name="content" value="{{ task.content }}" required size="50">
-        <button type="submit">Сохранить</button>
-    </form>
-    
-    <br>
-    <a href="/?filter={{ current_filter }}">Отмена</a>
-</body>
-</html>
+{% extends 'base.html' %}
+
+{% block title %}Редактирование - Трекер задач{% endblock %}
+
+{% block content %}
+    <div class="row justify-content-center">
+        <div class="col-md-6">
+            <div class="card shadow-sm mt-5">
+                <div class="card-header bg-white">
+                    <h1 class="h4 mb-0" class="mb-0">Редактирование задачи</h1>
+                </div>
+                <div class="card-body">
+                    <form action="/edit/{{ task.id }}?filter={{ current_filter }}" method="POST">
+                        <div class="mb-3">
+                            <label for="taskContent" class="form-label">Текст задачи</label>
+                            <input type="text" class="form-control" id="taskContent" name="content" value="{{ task.content }}" required>
+                        </div>
+                        <div class="d-flex justify-content-between">
+                            {% if current_filter == 'all' %}
+                                <a href="/" class="btn btn-outline-secondary">Отмена</a>
+                            {% else %}
+                                <a href="/?filter={{ current_filter }}" class="btn btn-outline-secondary">Отмена</a>
+                            {% endif %}
+                            <button type="submit" class="btn btn-primary">Сохранить</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
