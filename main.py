@@ -91,7 +91,8 @@ def edit(id):
         return render_template('edit.html', task=task, current_filter=filter_type)
 
 #Запуск
+with app.app_context():
+    db.create_all()
+
 if __name__ == "__main__":
-    with app.app_context():
-        db.create_all()
     app.run(debug=True)
