@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Трекер задач</title>
+</head>
+<body>
+    <h1>Задачи</h1>
+    <form action="/" method="POST">
+        <input type="text" name="content" required>
+        <button type="submit">Добавить</button>
+    </form>
+    <ul>
+        {% for task in tasks %}
+            <li>{{ task.content }}</li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
