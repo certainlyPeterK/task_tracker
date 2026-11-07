@@ -46,7 +46,18 @@ def toggle(id):
         return redirect('/')
     except Exception as e:
         return f"Ошибка при обновлении: {e}"
-    
+
+#Удаление
+@app.route('/delete/<int:id>', methods=['POST'])
+def delete(id):
+    task = Task.query.get_or_404(id)
+    try:
+        db.session.delete(task)
+        db.session.commit()
+        return redirect('/')
+    except Exception as e:
+        return f"Ошибка при удалении: {e}"
+
 #Запуск
 if __name__ == "__main__":
     with app.app_context():

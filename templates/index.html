@@ -7,23 +7,33 @@
 </head>
 <body>
     <h1>Задачи</h1>
-    <form action="/" method="POST">
+    <form action="/" method="POST">     <!-- Форма добавления -->
         <input type="text" name="content" required>
         <button type="submit">Добавить</button>
     </form>
+
+    <!-- Список задач и управляющие элементы -->
     <ul>    
         {% for task in tasks %}
             <li>
-                <form action="/toggle/{{ task.id }}" method="POST">
+                <form action="/toggle/{{ task.id }}" method="POST">     <!-- Форма изменения статуса -->
                     <input type="checkbox" 
                         {% if task.done %}checked{% endif %} 
                         onchange="this.form.submit()" 
                         title="Отметить как выполненное">
                 </form>
 
-                <span class="{% if task.done %}task-done{% endif %}">
+                <!-- Вывод самой задачи -->
+                <span class="{% if task.done %}task-done{% endif %}">   
                     {{ task.content }}
                 </span>
+
+                <div class="task-actions">
+                    <form action="/delete/{{ task.id }}" method="POST"
+                    onsubmit="return confirm('Точно удалить задачу?')">   <!-- Форма удаления --> 
+                        <button type="submit">Удалить</button>
+                    </form>
+                </div>
             </li>
         {% endfor %}
     </ul>
