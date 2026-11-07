@@ -50,9 +50,7 @@
                         <a href="/task/edit/{{ task.id }}?filter={{ current_filter }}" class="btn btn-sm btn-outline-secondary">Изменить</a>
                         
                         <!-- Форма удаления --> 
-                        <form action="/delete/{{ task.id }}?filter={{ current_filter }}" method="POST" class="d-inline" onsubmit="return confirm('Удалить задачу?')">
-                            <button data-id="{{ task.id }}" class="btn btn-sm btn-outline-danger delete-btn">Удалить</button>
-                        </form>
+                        <button data-id="{{ task.id }}" class="btn btn-sm btn-outline-danger delete-btn">Удалить</button>
                     </div>
                 </li>
                 {% else %}
