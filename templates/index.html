@@ -29,6 +29,8 @@
                 </span>
 
                 <div class="task-actions">
+                    <a href="/edit/{{ task.id }}">Редактировать</a> <!-- Ссылка на редактирование -->
+                    
                     <form action="/delete/{{ task.id }}" method="POST"
                     onsubmit="return confirm('Точно удалить задачу?')">   <!-- Форма удаления --> 
                         <button type="submit">Удалить</button>

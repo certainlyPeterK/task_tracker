@@ -58,6 +58,23 @@ def delete(id):
     except Exception as e:
         return f"Ошибка при удалении: {e}"
 
+#Редактирование
+@app.route('/edit/<int:id>', methods=['GET', 'POST'])
+def edit(id):
+    task = Task.query.get_or_404(id)
+    
+    if request.method == 'POST':
+        # Если пришел POST-запрос, значит пользователь нажал "Сохранить"
+        task.content = request.form['content']
+        try:
+            db.session.commit()
+            return redirect('/')
+        except Exception as e:
+            return f"Ошибка при редактировании: {e}"
+    else:
+        # Если GET-запрос, просто показываем страницу с формой
+        return render_template('edit.html', task=task)
+
 #Запуск
 if __name__ == "__main__":
     with app.app_context():

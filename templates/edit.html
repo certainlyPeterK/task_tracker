@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Редактирование</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <h1>Редактирование задачи</h1>
+    
+    <!-- Форма для отправки нового текста задачи -->
+    <form action="/edit/{{ task.id }}" method="POST">
+        <input type="text" name="content" value="{{ task.content }}" required size="50">
+        <button type="submit">Сохранить</button>
+    </form>
+    
+    <br>
+    <a href="/">Отмена</a>
+</body>
+</html>
