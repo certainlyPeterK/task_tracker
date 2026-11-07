@@ -19,6 +19,8 @@ class Task(db.Model):
         return '<Task %r>' % self.id
 
 #Главная страница
+
+#Добавление задачи
 @app.route('/', methods=['POST', 'GET'])
 def index():
     if request.method == 'POST':
@@ -34,6 +36,17 @@ def index():
         tasks = Task.query.order_by(Task.id.desc()).all()
         return render_template('index.html', tasks=tasks)
 
+#Изменение статуса
+@app.route('/toggle/<int:id>', methods=['POST'])
+def toggle(id):
+    task = Task.query.get_or_404(id)
+    task.done = not task.done
+    try:
+        db.session.commit()
+        return redirect('/')
+    except Exception as e:
+        return f"Ошибка при обновлении: {e}"
+    
 #Запуск
 if __name__ == "__main__":
     with app.app_context():

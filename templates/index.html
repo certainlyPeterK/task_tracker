@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
     <meta charset="UTF-8">
     <title>Трекер задач</title>
 </head>
@@ -10,9 +11,20 @@
         <input type="text" name="content" required>
         <button type="submit">Добавить</button>
     </form>
-    <ul>
+    <ul>    
         {% for task in tasks %}
-            <li>{{ task.content }}</li>
+            <li>
+                <form action="/toggle/{{ task.id }}" method="POST">
+                    <input type="checkbox" 
+                        {% if task.done %}checked{% endif %} 
+                        onchange="this.form.submit()" 
+                        title="Отметить как выполненное">
+                </form>
+
+                <span class="{% if task.done %}task-done{% endif %}">
+                    {{ task.content }}
+                </span>
+            </li>
         {% endfor %}
     </ul>
 </body>
